@@ -17,6 +17,7 @@ const UserForm = ({ id, action, show, setShow }) => {
     setState({ name: "", surname: "", age: "" });
     setShow(false);
   };
+
   return (
     <Modal show={show}>
       <Modal.Header closeButton>

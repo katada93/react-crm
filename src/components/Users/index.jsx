@@ -1,31 +1,29 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { Button, Container, Pagination, Table } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import {
-  Button,
-  ButtonGroup,
-  Container,
-  Pagination,
-  Table
-} from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import {
+  addUser,
   deleteUser,
+  editUser,
   fetchUsers,
+  setActivePage,
   setLimit,
-  setActivePage
+  useUsers
 } from "../../features/users/usersSlice";
 import deleteImg from "../../images/delete.svg";
 import editImg from "../../images/edit.svg";
-import PageLimit from "./PageLimit";
+import PageLimit from "../PageLimit";
 import UserForm from "./UserForm";
 
 const Users = () => {
   const dispatch = useDispatch();
-  const { users, activePage, limit, pageCount } = useSelector(
-    ({ users }) => users
-  );
+
+  const { users, activePage, limit, pageCount } = useUsers();
+
   const [showEdit, setShowEdit] = useState(false);
   const [activeUser, setActiveUser] = useState(null);
   const [action, setAction] = useState(null);
+
   const arrOfPages = Array(pageCount)
     .fill()
     .map((_, i) => i + 1);
@@ -34,6 +32,22 @@ const Users = () => {
     dispatch(fetchUsers(activePage, limit));
   }, [dispatch, activePage, limit]);
 
+  const userUpdate = useCallback(
+    async (data) => {
+      await dispatch(editUser(data));
+      await dispatch(fetchUsers(activePage, limit));
+    },
+    [dispatch, activePage, limit]
+  );
+
+  const userCreate = useCallback(
+    async (data) => {
+      await dispatch(addUser(data));
+      await dispatch(fetchUsers(activePage, limit));
+    },
+    [dispatch, activePage, limit]
+  );
+
   return (
     <Container>
       <UserForm
@@ -41,9 +55,15 @@ const Users = () => {
         id={activeUser}
         show={showEdit}
         setShow={setShowEdit}
+        user={activeUser}
+        onUpdate={userUpdate}
+        onCreate={userCreate}
       />
 
-      <PageLimit />
+      <PageLimit
+        limit={limit}
+        onChange={(limit) => dispatch(setLimit(limit))}
+      />
 
       <Table striped bordered hover variant="dark" size="sm">
         <thead>
@@ -89,6 +109,7 @@ const Users = () => {
           ))}
         </tbody>
       </Table>
+
       <footer
         style={{
           display: "flex",
@@ -104,6 +125,7 @@ const Users = () => {
         >
           Add user
         </Button>
+
         <Pagination style={{ justifyContent: "flex-end" }}>
           {arrOfPages.map((page) => (
             <Pagination.Item
