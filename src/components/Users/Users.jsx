@@ -1,21 +1,22 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Button,
   ButtonGroup,
   Container,
   Pagination,
-  Table,
-} from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+  Table
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import {
   deleteUser,
   fetchUsers,
   setLimit,
-  setActivePage,
-} from '../../features/users/usersSlice';
-import deleteImg from '../../images/delete.svg';
-import editImg from '../../images/edit.svg';
-import UserForm from './UserForm';
+  setActivePage
+} from "../../features/users/usersSlice";
+import deleteImg from "../../images/delete.svg";
+import editImg from "../../images/edit.svg";
+import PageLimit from "./PageLimit";
+import UserForm from "./UserForm";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -41,18 +42,10 @@ const Users = () => {
         show={showEdit}
         setShow={setShowEdit}
       />
-      <ButtonGroup className='mb-3'>
-        {[5, 10, 15].map((item) => (
-          <Button
-            variant={item === limit ? 'primary' : 'secondary'}
-            onClick={() => dispatch(setLimit(item))}
-            key={item}
-          >
-            {item}
-          </Button>
-        ))}
-      </ButtonGroup>
-      <Table striped bordered hover variant='dark' size='sm'>
+
+      <PageLimit />
+
+      <Table striped bordered hover variant="dark" size="sm">
         <thead>
           <tr>
             <th>#</th>
@@ -65,29 +58,29 @@ const Users = () => {
           {users?.map((user, i) => (
             <tr key={user.id}>
               <td>{i + 1}</td>
-              <td style={{ display: 'flex', alignItems: 'center' }}>
+              <td style={{ display: "flex", alignItems: "center" }}>
                 {user.name}
                 <img
                   onClick={() => {
                     setShowEdit(true);
                     setActiveUser(user.id);
-                    setAction('edit');
+                    setAction("edit");
                   }}
                   style={{
-                    marginLeft: 'auto',
-                    marginRight: '10px',
-                    cursor: 'pointer',
+                    marginLeft: "auto",
+                    marginRight: "10px",
+                    cursor: "pointer"
                   }}
                   src={editImg}
-                  alt='Edit'
+                  alt="Edit"
                 />
                 <img
                   onClick={() =>
                     dispatch(deleteUser(user.id, activePage, limit))
                   }
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                   src={deleteImg}
-                  alt='Delete'
+                  alt="Delete"
                 />
               </td>
               <td>{user.surname}</td>
@@ -98,20 +91,20 @@ const Users = () => {
       </Table>
       <footer
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
         }}
       >
         <Button
           onClick={() => {
             setShowEdit(true);
-            setAction('add');
+            setAction("add");
           }}
         >
           Add user
         </Button>
-        <Pagination style={{ justifyContent: 'flex-end' }}>
+        <Pagination style={{ justifyContent: "flex-end" }}>
           {arrOfPages.map((page) => (
             <Pagination.Item
               onClick={() => dispatch(setActivePage(page))}

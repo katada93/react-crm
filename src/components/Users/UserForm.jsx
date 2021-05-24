@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { addUser, editUser } from '../../features/users/usersSlice';
+import React, { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, editUser } from "../../features/users/usersSlice";
 
 const UserForm = ({ id, action, show, setShow }) => {
   const dispatch = useDispatch();
   const { activePage, limit } = useSelector(({ users }) => users);
-  const [state, setState] = useState({ name: '', surname: '', age: '' });
+  const [state, setState] = useState({ name: "", surname: "", age: "" });
 
   const handleFetch = () => {
-    if (action === 'edit') {
+    if (action === "edit") {
       dispatch(editUser(id, state, activePage, limit));
     } else {
       dispatch(addUser(state, activePage, limit));
     }
-    setState({ name: '', surname: '', age: '' });
+    setState({ name: "", surname: "", age: "" });
     setShow(false);
   };
   return (
@@ -28,7 +28,7 @@ const UserForm = ({ id, action, show, setShow }) => {
           onChange={(e) =>
             setState((prev) => ({ ...prev, name: e.target.value }))
           }
-          placeholder='name'
+          placeholder="name"
         />
         <br />
         <br />
@@ -37,7 +37,7 @@ const UserForm = ({ id, action, show, setShow }) => {
           onChange={(e) =>
             setState((prev) => ({ ...prev, surname: e.target.value }))
           }
-          placeholder='surname'
+          placeholder="surname"
         />
         <br />
         <br />
@@ -46,14 +46,14 @@ const UserForm = ({ id, action, show, setShow }) => {
           onChange={(e) =>
             setState((prev) => ({ ...prev, age: e.target.value }))
           }
-          placeholder='age'
+          placeholder="age"
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant='secondary' onClick={() => setShow(false)}>
+        <Button variant="secondary" onClick={() => setShow(false)}>
           Close
         </Button>
-        <Button variant='primary' onClick={handleFetch}>
+        <Button variant="primary" onClick={handleFetch}>
           Save Changes
         </Button>
       </Modal.Footer>
