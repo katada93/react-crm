@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Button, Container, Pagination, Table } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, Container, Table } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import {
   addUser,
   deleteUser,
@@ -8,34 +8,31 @@ import {
   fetchUsers,
   setActivePage,
   setLimit,
-  useUsers
-} from "../../features/users/usersSlice";
-import deleteImg from "../../images/delete.svg";
-import editImg from "../../images/edit.svg";
-import PageLimit from "../PageLimit";
-import UserForm from "./UserForm";
+  useUsers,
+} from '../../features/users/usersSlice';
+import deleteImg from '../../images/delete.svg';
+import editImg from '../../images/edit.svg';
+import PageLimit from '../PageLimit';
+import MyPagination from '../MyPagination';
+import UserForm from './UserForm';
 
 const Users = () => {
   const dispatch = useDispatch();
 
   const { users, activePage, limit, pageCount } = useUsers();
 
-  const [showEdit, setShowEdit] = useState(false);
+  const [show, setShow] = useState(false);
   const [activeUser, setActiveUser] = useState(null);
   const [action, setAction] = useState(null);
-
-  const arrOfPages = Array(pageCount)
-    .fill()
-    .map((_, i) => i + 1);
 
   useEffect(() => {
     dispatch(fetchUsers(activePage, limit));
   }, [dispatch, activePage, limit]);
 
   const userUpdate = useCallback(
-    async (data) => {
-      await dispatch(editUser(data));
-      await dispatch(fetchUsers(activePage, limit));
+    async (id, data) => {
+      await dispatch(editUser(id, data));
+      dispatch(fetchUsers(activePage, limit));
     },
     [dispatch, activePage, limit]
   );
@@ -43,7 +40,15 @@ const Users = () => {
   const userCreate = useCallback(
     async (data) => {
       await dispatch(addUser(data));
-      await dispatch(fetchUsers(activePage, limit));
+      dispatch(fetchUsers(activePage, limit));
+    },
+    [dispatch, activePage, limit]
+  );
+
+  const userDelete = useCallback(
+    async (id) => {
+      await dispatch(deleteUser(id));
+      dispatch(fetchUsers(activePage, limit));
     },
     [dispatch, activePage, limit]
   );
@@ -53,9 +58,8 @@ const Users = () => {
       <UserForm
         action={action}
         id={activeUser}
-        show={showEdit}
-        setShow={setShowEdit}
-        user={activeUser}
+        show={show}
+        setShow={setShow}
         onUpdate={userUpdate}
         onCreate={userCreate}
       />
@@ -65,7 +69,7 @@ const Users = () => {
         onChange={(limit) => dispatch(setLimit(limit))}
       />
 
-      <Table striped bordered hover variant="dark" size="sm">
+      <Table striped bordered hover variant='dark' size='sm'>
         <thead>
           <tr>
             <th>#</th>
@@ -78,29 +82,27 @@ const Users = () => {
           {users?.map((user, i) => (
             <tr key={user.id}>
               <td>{i + 1}</td>
-              <td style={{ display: "flex", alignItems: "center" }}>
+              <td style={{ display: 'flex', alignItems: 'center' }}>
                 {user.name}
                 <img
                   onClick={() => {
-                    setShowEdit(true);
+                    setShow(true);
                     setActiveUser(user.id);
-                    setAction("edit");
+                    setAction('edit');
                   }}
                   style={{
-                    marginLeft: "auto",
-                    marginRight: "10px",
-                    cursor: "pointer"
+                    marginLeft: 'auto',
+                    marginRight: '10px',
+                    cursor: 'pointer',
                   }}
                   src={editImg}
-                  alt="Edit"
+                  alt='Edit'
                 />
                 <img
-                  onClick={() =>
-                    dispatch(deleteUser(user.id, activePage, limit))
-                  }
-                  style={{ cursor: "pointer" }}
+                  onClick={() => userDelete(user.id)}
+                  style={{ cursor: 'pointer' }}
                   src={deleteImg}
-                  alt="Delete"
+                  alt='Delete'
                 />
               </td>
               <td>{user.surname}</td>
@@ -112,31 +114,25 @@ const Users = () => {
 
       <footer
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         <Button
           onClick={() => {
-            setShowEdit(true);
-            setAction("add");
+            setShow(true);
+            setAction('add');
           }}
         >
           Add user
         </Button>
 
-        <Pagination style={{ justifyContent: "flex-end" }}>
-          {arrOfPages.map((page) => (
-            <Pagination.Item
-              onClick={() => dispatch(setActivePage(page))}
-              active={activePage === page}
-              key={page}
-            >
-              {page}
-            </Pagination.Item>
-          ))}
-        </Pagination>
+        <MyPagination
+          pageCount={pageCount}
+          activePage={activePage}
+          onChange={(page) => dispatch(setActivePage(page))}
+        />
       </footer>
     </Container>
   );

@@ -1,13 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
+import FetchRequest from '../../FetchRequest';
+
+const fr = new FetchRequest({
+  secureMode: true,
+  host: 'school.constcode.ru',
+  port: '3500',
+  query: {
+    key: '0005ahuay8378ah8sk',
+  },
+});
 
 export const usersSlice = createSlice({
   name: 'users',
+
   initialState: {
     users: [],
     limit: 5,
     activePage: 1,
     pageCount: 0,
+    loading: false,
   },
+
   reducers: {
     setUsers: (state, action) => {
       state.users = action.payload;
@@ -21,19 +35,23 @@ export const usersSlice = createSlice({
     setPageCount: (state, action) => {
       state.pageCount = Math.ceil(action.payload / state.limit);
     },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
   },
 });
 
-export const { setUsers, setLimit, setActivePage, setPageCount } =
+export const { setUsers, setLimit, setActivePage, setPageCount, setLoading } =
   usersSlice.actions;
+
+export const useUsers = () => useSelector(({ users }) => users);
 
 export const fetchUsers = (page, limit) => async (dispatch) => {
   try {
-    const responce = await fetch(
-      `https://school.constcode.ru:3500/users?_page=${page}&_limit=${limit}&key=0005ahuay8378ah8sk`
-    );
-    const data = await responce.json();
-    const count = responce.headers.get('X-Total-Count');
+    const { count, data } = await fr.get('/users', {
+      _page: page,
+      _limit: limit,
+    });
 
     dispatch(setUsers(data));
     dispatch(setPageCount(count));
@@ -42,54 +60,25 @@ export const fetchUsers = (page, limit) => async (dispatch) => {
   }
 };
 
-export const editUser = (id, data, page, limit) => async (dispatch) => {
+export const editUser = (id, data) => async (dispatch) => {
   try {
-    const responce = await fetch(
-      `https://school.constcode.ru:3500/users/${id}/?key=0005ahuay8378ah8sk`,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      }
-    );
-    const result = await responce.json();
-    console.log(result);
-    dispatch(fetchUsers(page, limit));
+    await fr.put(`/users/${id}`, data);
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const deleteUser = (id, page, limit) => async (dispatch) => {
+export const deleteUser = (id) => async (dispatch) => {
   try {
-    const responce = await fetch(
-      `https://school.constcode.ru:3500/users/${id}/?key=0005ahuay8378ah8sk`,
-      {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
-    const result = await responce.json();
-    console.log(result);
-    dispatch(fetchUsers(page, limit));
+    await fr.delete(`/users/${id}`);
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const addUser = (data, page, limit) => async (dispatch) => {
+export const addUser = (data) => async (dispatch) => {
   try {
-    const responce = await fetch(
-      `https://school.constcode.ru:3500/users/?key=0005ahuay8378ah8sk`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      }
-    );
-    const result = await responce.json();
-    console.log(result);
-    dispatch(fetchUsers(page, limit));
+    await fr.post('/users', data);
   } catch (error) {
     console.log(error.message);
   }
