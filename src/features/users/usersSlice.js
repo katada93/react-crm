@@ -47,40 +47,51 @@ export const { setUsers, setLimit, setActivePage, setPageCount, setLoading } =
 export const useUsers = () => useSelector(({ users }) => users);
 
 export const fetchUsers = (page, limit) => async (dispatch) => {
+  dispatch(setLoading(true));
   try {
     const { count, data } = await fr.get('/users', {
       _page: page,
       _limit: limit,
     });
-
+    dispatch(setLoading(false));
     dispatch(setUsers(data));
     dispatch(setPageCount(count));
   } catch (error) {
     console.log(error.message);
+    dispatch(setLoading(false));
   }
 };
 
 export const editUser = (id, data) => async (dispatch) => {
+  dispatch(setLoading(true));
   try {
     await fr.put(`/users/${id}`, data);
+    dispatch(setLoading(false));
   } catch (error) {
     console.log(error.message);
+    dispatch(setLoading(false));
   }
 };
 
 export const deleteUser = (id) => async (dispatch) => {
+  dispatch(setLoading(true));
   try {
     await fr.delete(`/users/${id}`);
+    dispatch(setLoading(false));
   } catch (error) {
     console.log(error.message);
+    dispatch(setLoading(false));
   }
 };
 
 export const addUser = (data) => async (dispatch) => {
+  dispatch(setLoading(true));
   try {
     await fr.post('/users', data);
+    dispatch(setLoading(false));
   } catch (error) {
     console.log(error.message);
+    dispatch(setLoading(false));
   }
 };
 

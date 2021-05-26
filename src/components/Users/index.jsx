@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Container, Table } from 'react-bootstrap';
+import { Button, Container, Spinner, Table } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import {
   addUser,
@@ -19,7 +19,7 @@ import UserForm from './UserForm';
 const Users = () => {
   const dispatch = useDispatch();
 
-  const { users, activePage, limit, pageCount } = useUsers();
+  const { users, activePage, limit, pageCount, loading } = useUsers();
 
   const [show, setShow] = useState(false);
   const [activeUser, setActiveUser] = useState(null);
@@ -52,6 +52,18 @@ const Users = () => {
     },
     [dispatch, activePage, limit]
   );
+
+  if (loading) {
+    return (
+      <Container>
+        <Spinner
+          animation='border'
+          variant='dark'
+          style={{ display: 'block', margin: '150px auto' }}
+        />
+      </Container>
+    );
+  }
 
   return (
     <Container>
