@@ -1,25 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-const UserForm = (props) => {
-  const { id, action, show, setShow, onUpdate, onCreate } = props;
+const UpdateUserForm = ({ user, show, setShow, onUpdate }) => {
+  const [state, setState] = useState({
+    name: '',
+    surname: '',
+    age: '',
+  });
 
-  const [state, setState] = useState({ name: '', surname: '', age: '' });
+  console.log(user);
 
   const handleFetch = () => {
-    if (action === 'edit') {
-      onUpdate(id, state);
-    } else {
-      onCreate(state);
-    }
-    setState({ name: '', surname: '', age: '' });
+    onUpdate(user.id, state);
     setShow(false);
   };
+
+  useEffect(() => {
+    setState({ name: user?.name, surname: user?.surname, age: user?.age });
+  }, [user]);
 
   return (
     <Modal show={show}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit User</Modal.Title>
+        <Modal.Title>Update User</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <input
@@ -53,11 +56,11 @@ const UserForm = (props) => {
           Close
         </Button>
         <Button variant='primary' onClick={handleFetch}>
-          Save Changes
+          Update User
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default UserForm;
+export default UpdateUserForm;

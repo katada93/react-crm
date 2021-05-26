@@ -14,16 +14,16 @@ import deleteImg from '../../images/delete.svg';
 import editImg from '../../images/edit.svg';
 import PageLimit from '../PageLimit';
 import MyPagination from '../MyPagination';
-import UserForm from './UserForm';
+import CreateUserFrom from './CreateUserFrom';
+import UpdateUserForm from './UpdateUserForm';
 
 const Users = () => {
   const dispatch = useDispatch();
-
   const { users, activePage, limit, pageCount, loading } = useUsers();
 
-  const [show, setShow] = useState(false);
+  const [showCreate, setShowCreateForm] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
   const [activeUser, setActiveUser] = useState(null);
-  const [action, setAction] = useState(null);
 
   useEffect(() => {
     dispatch(fetchUsers(activePage, limit));
@@ -67,13 +67,17 @@ const Users = () => {
 
   return (
     <Container>
-      <UserForm
-        action={action}
-        id={activeUser}
-        show={show}
-        setShow={setShow}
-        onUpdate={userUpdate}
+      <CreateUserFrom
+        show={showCreate}
+        setShow={setShowCreateForm}
         onCreate={userCreate}
+      />
+
+      <UpdateUserForm
+        user={users.find((user) => user.id === activeUser)}
+        show={showUpdate}
+        setShow={setShowUpdate}
+        onUpdate={userUpdate}
       />
 
       <PageLimit
@@ -98,9 +102,8 @@ const Users = () => {
                 {user.name}
                 <img
                   onClick={() => {
-                    setShow(true);
                     setActiveUser(user.id);
-                    setAction('edit');
+                    setShowUpdate(true);
                   }}
                   style={{
                     marginLeft: 'auto',
@@ -133,8 +136,7 @@ const Users = () => {
       >
         <Button
           onClick={() => {
-            setShow(true);
-            setAction('add');
+            setShowCreateForm(true);
           }}
         >
           Add user
