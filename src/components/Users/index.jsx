@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Container, Spinner, Table } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState } from "react";
+import { Button, Container, Spinner, Table } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import {
   addUser,
   deleteUser,
@@ -8,14 +8,15 @@ import {
   fetchUsers,
   setActivePage,
   setLimit,
-  useUsers,
-} from '../../features/users/usersSlice';
-import deleteImg from '../../images/delete.svg';
-import editImg from '../../images/edit.svg';
-import PageLimit from '../PageLimit';
-import MyPagination from '../MyPagination';
-import CreateUserFrom from './CreateUserFrom';
-import UpdateUserForm from './UpdateUserForm';
+  useUsers
+} from "../../features/users/usersSlice";
+import deleteImg from "../../images/delete.svg";
+import editImg from "../../images/edit.svg";
+import PageLimit from "../PageLimit";
+import MyPagination from "../MyPagination";
+import CreateUserFrom from "./CreateUserFrom";
+import UpdateUserForm from "./UpdateUserForm";
+import UnderLoader from "../UnderLoader";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -53,18 +54,6 @@ const Users = () => {
     [dispatch, activePage, limit]
   );
 
-  if (loading) {
-    return (
-      <Container>
-        <Spinner
-          animation='border'
-          variant='dark'
-          style={{ display: 'block', margin: '150px auto' }}
-        />
-      </Container>
-    );
-  }
-
   return (
     <Container>
       <CreateUserFrom
@@ -85,53 +74,55 @@ const Users = () => {
         onChange={(limit) => dispatch(setLimit(limit))}
       />
 
-      <Table striped bordered hover variant='dark' size='sm'>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Age</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users?.map((user, i) => (
-            <tr key={user.id}>
-              <td>{i + 1}</td>
-              <td style={{ display: 'flex', alignItems: 'center' }}>
-                {user.name}
-                <img
-                  onClick={() => {
-                    setActiveUser(user.id);
-                    setShowUpdate(true);
-                  }}
-                  style={{
-                    marginLeft: 'auto',
-                    marginRight: '10px',
-                    cursor: 'pointer',
-                  }}
-                  src={editImg}
-                  alt='Edit'
-                />
-                <img
-                  onClick={() => userDelete(user.id)}
-                  style={{ cursor: 'pointer' }}
-                  src={deleteImg}
-                  alt='Delete'
-                />
-              </td>
-              <td>{user.surname}</td>
-              <td>{user.age}</td>
+      <UnderLoader loading={loading}>
+        <Table striped bordered hover variant="dark" size="sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Age</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {users?.map((user, i) => (
+              <tr key={user.id}>
+                <td>{i + 1}</td>
+                <td style={{ display: "flex", alignItems: "center" }}>
+                  {user.name}
+                  <img
+                    onClick={() => {
+                      setActiveUser(user.id);
+                      setShowUpdate(true);
+                    }}
+                    style={{
+                      marginLeft: "auto",
+                      marginRight: "10px",
+                      cursor: "pointer"
+                    }}
+                    src={editImg}
+                    alt="Edit"
+                  />
+                  <img
+                    onClick={() => userDelete(user.id)}
+                    style={{ cursor: "pointer" }}
+                    src={deleteImg}
+                    alt="Delete"
+                  />
+                </td>
+                <td>{user.surname}</td>
+                <td>{user.age}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </UnderLoader>
 
       <footer
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
         }}
       >
         <Button
