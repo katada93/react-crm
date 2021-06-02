@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Container, Table } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState } from "react";
+import { Button, Container, Table } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import {
   addUser,
   deleteUser,
@@ -8,15 +8,15 @@ import {
   fetchUsers,
   setActivePage,
   setLimit,
-  useUsers,
-} from '../../features/users/usersSlice';
-import deleteImg from '../../images/delete.svg';
-import editImg from '../../images/edit.svg';
-import PageLimit from '../PageLimit';
-import MyPagination from '../MyPagination';
-import CreateUserFrom from './CreateUserFrom';
-import UpdateUserForm from './UpdateUserForm';
-import UnderLoader from '../UnderLoader';
+  useUsers
+} from "../../features/users/usersSlice";
+import deleteImg from "../../images/delete.svg";
+import editImg from "../../images/edit.svg";
+import PageLimit from "../PageLimit";
+import MyPagination from "../MyPagination";
+import CreateUserFrom from "./CreateUserFrom";
+import UpdateUserForm from "./UpdateUserForm";
+import UnderLoader from "../UnderLoader";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -75,7 +75,7 @@ const Users = () => {
       />
 
       <UnderLoader loading={loading}>
-        <Table striped bordered hover variant='dark' size='md'>
+        <Table striped bordered hover variant="dark" size="md">
           <thead>
             <tr>
               <th>#</th>
@@ -92,24 +92,24 @@ const Users = () => {
                 <td>{user.name}</td>
                 <td>{user.surname}</td>
                 <td>{user.age}</td>
-                <td style={{ textAlign: 'center' }}>
+                <td style={{ textAlign: "center" }}>
                   <img
                     onClick={() => {
                       setActiveUser(user.id);
                       setShowUpdate(true);
                     }}
                     style={{
-                      marginRight: '20px',
-                      cursor: 'pointer',
+                      marginRight: "20px",
+                      cursor: "pointer"
                     }}
                     src={editImg}
-                    alt='Edit'
+                    alt="Edit"
                   />
                   <img
                     onClick={() => userDelete(user.id)}
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: "pointer" }}
                     src={deleteImg}
-                    alt='Delete'
+                    alt="Delete"
                   />
                 </td>
               </tr>
@@ -120,10 +120,10 @@ const Users = () => {
 
       <footer
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: '30px',
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: "30px"
         }}
       >
         <Button

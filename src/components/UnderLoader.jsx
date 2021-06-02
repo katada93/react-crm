@@ -6,7 +6,7 @@ export default function UnderLoader(props) {
   if (loading) {
     return (
       <div style={{ position: "relative" }}>
-        <div style={{ opacity: 0.5 }}>{children}</div>
+        <div style={{ opacity: 0.4 }}>{children}</div>
         <div
           style={{
             width: "100%",
@@ -19,7 +19,7 @@ export default function UnderLoader(props) {
           <Spinner
             animation="border"
             variant="dark"
-            style={{ display: "block" }}
+            style={{ display: "block", margin: "150px auto 0" }}
           />
         </div>
       </div>
