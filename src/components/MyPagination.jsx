@@ -1,6 +1,6 @@
-import { Pagination } from "react-bootstrap";
-import PropTypes from "prop-types";
-import { useMemo } from "react";
+import { Pagination } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 
 const MyPagination = ({ pageCount, activePage, onChange }) => {
   const arrOfPages = useMemo(
@@ -12,7 +12,7 @@ const MyPagination = ({ pageCount, activePage, onChange }) => {
   );
 
   return (
-    <Pagination style={{ justifyContent: "flex-end" }}>
+    <Pagination style={{ margin: 0 }}>
       {arrOfPages.map((page) => (
         <Pagination.Item
           onClick={() => onChange(page)}
@@ -29,13 +29,13 @@ const MyPagination = ({ pageCount, activePage, onChange }) => {
 MyPagination.propTypes = {
   pageCount: PropTypes.number.isRequired,
   activePage: PropTypes.number,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 MyPagination.defaultProps = {
   pageCount: 0,
   activePage: 1,
-  onChange() {}
+  onChange() {},
 };
 
 export default MyPagination;

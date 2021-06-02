@@ -25,6 +25,7 @@ export const usersSlice = createSlice({
   reducers: {
     setUsers: (state, action) => {
       state.users = action.payload;
+      state.loading = false;
     },
     setLimit: (state, action) => {
       state.limit = action.payload;
@@ -53,7 +54,6 @@ export const fetchUsers = (page, limit) => async (dispatch) => {
       _page: page,
       _limit: limit,
     });
-    dispatch(setLoading(false));
     dispatch(setUsers(data));
     dispatch(setPageCount(count));
   } catch (error) {

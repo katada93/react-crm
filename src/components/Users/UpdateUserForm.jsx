@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
-import UserForm from "./UserForm";
+import UserForm from './UserForm';
 
 const UpdateUserForm = (props) => {
   const { user, show, setShow, onUpdate } = props;
 
   return (
     <UserForm
-      doneText="Update user"
+      doneText='Update user'
       user={user}
       show={show}
       onClose={() => setShow(false)}

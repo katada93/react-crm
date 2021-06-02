@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Button, Container, Spinner, Table } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, Container, Table } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import {
   addUser,
   deleteUser,
@@ -8,15 +8,15 @@ import {
   fetchUsers,
   setActivePage,
   setLimit,
-  useUsers
-} from "../../features/users/usersSlice";
-import deleteImg from "../../images/delete.svg";
-import editImg from "../../images/edit.svg";
-import PageLimit from "../PageLimit";
-import MyPagination from "../MyPagination";
-import CreateUserFrom from "./CreateUserFrom";
-import UpdateUserForm from "./UpdateUserForm";
-import UnderLoader from "../UnderLoader";
+  useUsers,
+} from '../../features/users/usersSlice';
+import deleteImg from '../../images/delete.svg';
+import editImg from '../../images/edit.svg';
+import PageLimit from '../PageLimit';
+import MyPagination from '../MyPagination';
+import CreateUserFrom from './CreateUserFrom';
+import UpdateUserForm from './UpdateUserForm';
+import UnderLoader from '../UnderLoader';
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -75,43 +75,43 @@ const Users = () => {
       />
 
       <UnderLoader loading={loading}>
-        <Table striped bordered hover variant="dark" size="sm">
+        <Table striped bordered hover variant='dark' size='md'>
           <thead>
             <tr>
               <th>#</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Age</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {users?.map((user, i) => (
               <tr key={user.id}>
                 <td>{i + 1}</td>
-                <td style={{ display: "flex", alignItems: "center" }}>
-                  {user.name}
+                <td>{user.name}</td>
+                <td>{user.surname}</td>
+                <td>{user.age}</td>
+                <td style={{ textAlign: 'center' }}>
                   <img
                     onClick={() => {
                       setActiveUser(user.id);
                       setShowUpdate(true);
                     }}
                     style={{
-                      marginLeft: "auto",
-                      marginRight: "10px",
-                      cursor: "pointer"
+                      marginRight: '20px',
+                      cursor: 'pointer',
                     }}
                     src={editImg}
-                    alt="Edit"
+                    alt='Edit'
                   />
                   <img
                     onClick={() => userDelete(user.id)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     src={deleteImg}
-                    alt="Delete"
+                    alt='Delete'
                   />
                 </td>
-                <td>{user.surname}</td>
-                <td>{user.age}</td>
               </tr>
             ))}
           </tbody>
@@ -120,9 +120,10 @@ const Users = () => {
 
       <footer
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: '30px',
         }}
       >
         <Button

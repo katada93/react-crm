@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { Button, Modal } from "react-bootstrap";
-import Input from "../Input";
-import PropTypes from "prop-types";
+import { useState, useEffect } from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import Input from '../Input';
+import PropTypes from 'prop-types';
 
 const UserForm = (props) => {
   const { user, show, closeText, doneText, onDone, onClose } = props;
@@ -17,34 +17,25 @@ const UserForm = (props) => {
   }, [user]);
 
   return (
-    <Modal show={show}>
+    <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Update User</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Input initValue={name} onChange={setName} placeholder="name" />
+        <Input autoFocus value={name} onChange={setName} placeholder='name' />
         <br />
         <br />
-        <Input
-          initValue={surname}
-          onChange={setSurname}
-          placeholder="surname"
-        />
+        <Input value={surname} onChange={setSurname} placeholder='surname' />
         <br />
         <br />
-        <Input
-          initValue={age}
-          onChange={(e) => setAge(parseInt(e.target.value, 10))}
-          type="number"
-          placeholder="age"
-        />
+        <Input value={age} onChange={setAge} type='number' placeholder='age' />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant='secondary' onClick={onClose}>
           {closeText}
         </Button>
         <Button
-          variant="primary"
+          variant='primary'
           onClick={() => onDone({ name, surname, age })}
         >
           {doneText}
@@ -60,19 +51,19 @@ UserForm.propTypes = {
   user: PropTypes.shape({
     name: PropTypes.string.isRequired,
     surname: PropTypes.string.isRequired,
-    age: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    age: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   }).isRequired,
   show: PropTypes.bool.isRequired,
   closeText: PropTypes.string.isRequired,
   doneText: PropTypes.string.isRequired,
   onDone: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
 };
 
 UserForm.defaultProps = {
-  user: { name: "", surname: "", age: 0 },
-  closeText: "Close",
-  doneText: "Done",
+  user: { name: '', surname: '', age: 0 },
+  closeText: 'Close',
+  doneText: 'Done',
   onDone() {},
-  onClose() {}
+  onClose() {},
 };

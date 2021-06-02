@@ -1,14 +1,11 @@
-import { useCallback, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
-import Input from "../Input";
-import UserForm from "./UserForm";
+import UserForm from './UserForm';
 
 const CreateUserFrom = (props) => {
   const { show, setShow, onCreate } = props;
 
   return (
     <UserForm
-      doneText="Create"
+      doneText='Create'
       show={show}
       onClose={() => setShow(false)}
       onDone={(data) => {
