@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react";
+import { forwardRef, useCallback, useState } from "react";
 import PropTypes from "prop-types";
 
-export default function Input(props) {
+const Input = forwardRef((props, ref) => {
   const { initValue, onChange, onEnter, ...datum } = props;
 
   const [value, setValue] = useState(initValue);
@@ -19,11 +19,16 @@ export default function Input(props) {
     [onChange, onEnter]
   );
 
-  return <input value={value} onChange={changeHandler} {...datum} />;
-}
+  return <input ref={ref} value={value} onChange={changeHandler} {...datum} />;
+});
+
+Input.displayName = "Input";
+
+export default Input;
 
 Input.propTypes = {
-  initValue: PropTypes.string.isRequired,
+  initValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   onChange: PropTypes.func.isRequired,
   onEnter: PropTypes.func.isRequired
 };

@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import Input from '../Input';
-import PropTypes from 'prop-types';
+import { useState, useEffect, useRef } from "react";
+import { Button, Modal } from "react-bootstrap";
+import Input from "../Input";
+import PropTypes from "prop-types";
 
 const UserForm = (props) => {
   const { user, show, closeText, doneText, onDone, onClose } = props;
@@ -10,10 +10,10 @@ const UserForm = (props) => {
   const [surname, setSurname] = useState(user.surname);
   const [age, setAge] = useState(user.age);
 
-  const nameRef = useRef(null);
-  const surnameRef = useRef(null);
-  const ageRef = useRef(null);
-  const doneRef = useRef(null);
+  const nameRef = useRef();
+  const surnameRef = useRef();
+  const ageRef = useRef();
+  const doneRef = useRef();
 
   useEffect(() => {
     setName(user.name);
@@ -30,36 +30,37 @@ const UserForm = (props) => {
         <Input
           ref={nameRef}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
+            if (e.key === "Enter" && surnameRef.current) {
+              console.log(surnameRef.current);
               surnameRef.current.focus();
             }
           }}
-          value={name}
+          initValue={name}
           onChange={setName}
-          placeholder='name'
+          placeholder="name"
         />
         <Input
           ref={surnameRef}
-          value={surname}
+          initValue={surname}
           onChange={setSurname}
-          placeholder='surname'
+          placeholder="surname"
         />
         <Input
           ref={ageRef}
-          value={age}
+          initValue={age}
           onChange={setAge}
-          type='number'
-          placeholder='age'
+          type="number"
+          placeholder="age"
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant='secondary' onClick={onClose}>
+        <Button variant="secondary" onClick={onClose}>
           {closeText}
         </Button>
         <Button
           ref={doneRef}
-          variant='primary'
-          onClick={() => onDone({ name, surname, age })}
+          variant="primary"
+          onClick={() => onDone({ ...user, name, surname, age })}
         >
           {doneText}
         </Button>
@@ -72,21 +73,22 @@ export default UserForm;
 
 UserForm.propTypes = {
   user: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     name: PropTypes.string.isRequired,
     surname: PropTypes.string.isRequired,
-    age: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    age: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
   }).isRequired,
   show: PropTypes.bool.isRequired,
   closeText: PropTypes.string.isRequired,
   doneText: PropTypes.string.isRequired,
   onDone: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 UserForm.defaultProps = {
-  user: { name: '', surname: '', age: 0 },
-  closeText: 'Close',
-  doneText: 'Done',
+  user: { name: "", surname: "", age: 0 },
+  closeText: "Close",
+  doneText: "Done",
   onDone() {},
-  onClose() {},
+  onClose() {}
 };

@@ -32,6 +32,7 @@ const Users = () => {
 
   const userUpdate = useCallback(
     async (id, data) => {
+      console.log(id, data)
       await dispatch(editUser(id, data));
       dispatch(fetchUsers(activePage, limit));
     },
