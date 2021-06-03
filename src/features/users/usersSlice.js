@@ -1,25 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
-import FetchRequest from "../../FetchRequest";
+import { createSlice } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
+import FetchRequest from '../../FetchRequest';
 
 const fr = new FetchRequest({
   secureMode: true,
-  host: "school.constcode.ru",
-  port: "3500",
+  host: 'school.constcode.ru',
+  port: '3500',
   query: {
-    key: "0005ahuay8378ah8sk"
-  }
+    key: '0005ahuay8378ah8sk',
+  },
 });
 
 export const usersSlice = createSlice({
-  name: "users",
+  name: 'users',
 
   initialState: {
     users: [],
     limit: 5,
     activePage: 1,
     pageCount: 0,
-    loading: false
+    loading: false,
   },
 
   reducers: {
@@ -38,26 +38,21 @@ export const usersSlice = createSlice({
     },
     setLoading: (state, action) => {
       state.loading = action.payload;
-    }
-  }
+    },
+  },
 });
 
-export const {
-  setUsers,
-  setLimit,
-  setActivePage,
-  setPageCount,
-  setLoading
-} = usersSlice.actions;
+export const { setUsers, setLimit, setActivePage, setPageCount, setLoading } =
+  usersSlice.actions;
 
 export const useUsers = () => useSelector(({ users }) => users);
 
 export const fetchUsers = (page, limit) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    const { count, data } = await fr.get("/users", {
+    const { count, data } = await fr.get('/users', {
       _page: page,
-      _limit: limit
+      _limit: limit,
     });
     dispatch(setUsers(data));
     dispatch(setPageCount(count));
@@ -92,7 +87,7 @@ export const deleteUser = (id) => async (dispatch) => {
 export const addUser = (data) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    await fr.post("/users", data);
+    await fr.post('/users', data);
     dispatch(setLoading(false));
   } catch (error) {
     console.log(error.message);
@@ -103,7 +98,10 @@ export const addUser = (data) => async (dispatch) => {
 export const searchUser = (text) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    const data = await fr.search("/users", { q: text });
+    const data = await fr.search('/users', { q: text });
+    dispatch(setActivePage(1));
+    dispatch(setLimit(5));
+
     dispatch(setUsers(data));
     dispatch(setLoading(false));
   } catch (error) {
